@@ -21,6 +21,14 @@ feature 'restaurants' do
     end
   end
   context 'creating restaurants' do
+    before do
+      visit('/')
+      click_link('Sign up')
+      fill_in('Email', with: 'test@example.com')
+      fill_in('Password', with: 'testtest')
+      fill_in('Password confirmation', with: 'testtest')
+      click_button('Sign up')
+    end
     scenario 'prompts user to fill out the form and then displays the new restaurant' do
       visit '/restaurants'
       click_link 'add restaurant'
@@ -42,6 +50,14 @@ feature 'restaurants' do
     end
   end
   context 'editing restaurant' do
+    before do
+      visit('/')
+      click_link('Sign up')
+      fill_in('Email', with: 'test@example.com')
+      fill_in('Password', with: 'testtest')
+      fill_in('Password confirmation', with: 'testtest')
+      click_button('Sign up')
+    end
 
     let!(:kfc){ Restaurant.create(name:'KFC') }
 
@@ -55,6 +71,14 @@ feature 'restaurants' do
     end
   end
   context 'deleting restaurants' do
+    before do
+      visit('/')
+      click_link('Sign up')
+      fill_in('Email', with: 'test@example.com')
+      fill_in('Password', with: 'testtest')
+      fill_in('Password confirmation', with: 'testtest')
+      click_button('Sign up')
+    end
     before {Restaurant.create name: 'KFC'}
 
     scenario 'removes a restaurant when a user clicks a delete link' do
@@ -65,6 +89,15 @@ feature 'restaurants' do
     end
   end
   context 'an invalid restaurant' do
+    before do
+      visit('/')
+      click_link('Sign up')
+      fill_in('Email', with: 'test@example.com')
+      fill_in('Password', with: 'testtest')
+      fill_in('Password confirmation', with: 'testtest')
+      click_button('Sign up')
+    end
+
     it 'does not let you submit a name that is too short' do
       visit '/restaurants'
       click_link 'add restaurant'
@@ -77,6 +110,13 @@ feature 'restaurants' do
       Restaurant.create(name: "Moe's Tavern")
       restaurant = Restaurant.new(name: "Moe's Tavern")
       expect(restaurant).to have(1).error_on(:name)
+    end
+  end
+  context 'user not signed in' do
+    it 'must be signed to add a restaurant' do
+      visit('/')
+      click_link 'add restaurant'
+      expect(page).to have_content 'You need to sign in or sign up before continuing'
     end
   end
 end
