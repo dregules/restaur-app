@@ -29,6 +29,7 @@ feature 'restaurants' do
       fill_in('Password confirmation', with: 'testtest')
       click_button('Sign up')
     end
+
     scenario 'prompts user to fill out the form and then displays the new restaurant' do
       visit '/restaurants'
       click_link 'add restaurant'
@@ -69,23 +70,7 @@ feature 'restaurants' do
       expect(page).to have_content 'Kentucky Fried Chicken'
       expect(current_path).to eq '/restaurants'
     end
-
-    scenario 'does not let a user that has not created the restaurant, edit that restaurant' do
-      click_link 'Sign out'
-      visit('/')
-      click_link('Sign up')
-      fill_in('Email', with: 'test2@example.com')
-      fill_in('Password', with: 'testtest')
-      fill_in('Password confirmation', with: 'testtest')
-      click_button('Sign up')
-
-      visit '/restaurants'
-      click_link 'Edit KFC'
-      expect(page).to have_content 'error'
-    end 
   end
-
-
 
   context 'deleting restaurants' do
     before do
