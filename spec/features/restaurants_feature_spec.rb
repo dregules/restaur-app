@@ -64,4 +64,20 @@ feature 'restaurants' do
       expect(page).to have_content 'Restaurant deleted successfully'
     end
   end
+  context 'an invalid restaurant' do
+    it 'does not let you submit a name that is too short' do
+      visit '/restaurants'
+      click_link 'add restaurant'
+      fill_in 'Name', with: 'kf'
+      click_button 'Create Restaurant'
+      expect(page).not_to have_css 'h2', text: 'kf'
+      expect(page).to have_content 'error'
+    end
+    it "is not valid unless it has a unique name" do
+      Restaurant.create(name: "Moe's Tavern")
+      restaurant = Restaurant.new(name: "Moe's Tavern")
+      expect(restaurant).to have(1).error_on(:name)
+    end
+  end
 end
+
