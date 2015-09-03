@@ -61,7 +61,7 @@ feature 'restaurants' do
 
     let!(:kfc){ Restaurant.create(name:'KFC') }
 
-    scenario 'let a user edit a restaurant' do
+    scenario 'let a user that created the restaurant, edit that restaurant' do
       visit '/restaurants'
       click_link 'Edit KFC'
       fill_in 'Name', with: 'Kentucky Fried Chicken'
@@ -69,7 +69,24 @@ feature 'restaurants' do
       expect(page).to have_content 'Kentucky Fried Chicken'
       expect(current_path).to eq '/restaurants'
     end
+
+    scenario 'does not let a user that has not created the restaurant, edit that restaurant' do
+      click_link 'Sign out'
+      visit('/')
+      click_link('Sign up')
+      fill_in('Email', with: 'test2@example.com')
+      fill_in('Password', with: 'testtest')
+      fill_in('Password confirmation', with: 'testtest')
+      click_button('Sign up')
+
+      visit '/restaurants'
+      click_link 'Edit KFC'
+      expect(page).to have_content 'error'
+    end 
   end
+
+
+
   context 'deleting restaurants' do
     before do
       visit('/')
